@@ -53,3 +53,21 @@ exports.addUserToGroup = async (req, res) => {
     });
   }
 };
+
+exports.unlinkUserFromGroup = async (req, res) => {
+  const { userId, groupId } = req.body;
+
+  try {
+    await Group.findByIdAndUpdate(groupId, { $pullAll: { users: [userId] } });
+    await User.findByIdAndUpdate(userId, { $pullAll: { groups: [groupId] } });
+
+    res.status(200).json({
+      msg: "user removed from group successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      msg: "error",
+    });
+  }
+};

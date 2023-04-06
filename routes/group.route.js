@@ -6,16 +6,19 @@ const groupController = require("./../controllers/group.contoller");
 
 const router = express.Router();
 
-router.route("/").post(
-  [
-    isGroupsManager,
-    (req, res, next) => {
-      // function just as a reminder that we can do it like this
-      next();
-    },
-  ],
-  groupController.createGroup
-);
+router
+  .route("/")
+  .post(
+    [
+      isGroupsManager,
+      (req, res, next) => {
+        // function just as a reminder that we can do it like this
+        next();
+      },
+    ],
+    groupController.createGroup
+  )
+  .put([isGroupsManager], groupController.unlinkUserFromGroup);
 
 router
   .route("/:id")
